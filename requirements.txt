@@ -1,0 +1,16 @@
+torch>=2.2.0
+torchvision>=0.17.0
+numpy
+Pillow
+opencv-python
+scipy
+scikit-image
+lpips
+facenet-pytorch
+pytorch-fid
+albumentations
+matplotlib
+tqdm
+pyyaml
+gradio>=4.0
+wandb
