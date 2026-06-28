@@ -1,0 +1,31 @@
+data:
+  pairs_dir: data/cufs_pairs
+  image_size: 256
+  batch_size: 4
+  num_workers: 4
+
+model:
+  ngf: 64        # generator filters
+  ndf: 64        # discriminator filters
+
+loss:
+  lambda_l1: 100
+  lambda_perceptual: 10
+  lambda_identity: 5
+
+train:
+  epochs: 200
+  lr: 0.0002
+  beta1: 0.5
+  beta2: 0.999
+  decay_start: 100   # epoch to start linear LR decay
+  save_every: 10
+  sample_every: 5
+
+paths:
+  checkpoints: outputs/checkpoints
+  samples: outputs/samples
+  metrics: outputs/metrics
+
+device: cuda
+wandb: false      # set true to enable W&B logging
