@@ -29,7 +29,7 @@ from models.losses import GANLoss, PerceptualLoss, IdentityLoss
 
 
 def train(cfg: dict, resume: str = None):
-    device = torch.device(cfg["device"] if torch.cuda.is_available() else "cpu")
+    device = torch.device(cfg["device"] if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     print(f"Training on {device}")
 
     # --- Data ---

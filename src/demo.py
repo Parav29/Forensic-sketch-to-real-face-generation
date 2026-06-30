@@ -17,7 +17,7 @@ from models.generator import UNetGenerator
 
 CHECKPOINT = os.environ.get("CKPT", "outputs/checkpoints/final.pt")
 G = None
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
 
 def load_model(checkpoint_path: str = CHECKPOINT):
@@ -38,7 +38,17 @@ def generate(sketch_img: Image.Image) -> Image.Image:
     """Take a PIL sketch, return a PIL generated photo."""
     if sketch_img is None:
         return None
+    from PIL import ImageOps
+    
     sketch = sketch_img.convert("RGB").resize((256, 256))
+    
+    # The model was trained on inverted sketches (white lines on black background).
+    # If the user uploads a typical sketch (black lines on a white background),
+    # we automatically invert it.
+    gray = sketch.convert("L")
+    if np.mean(np.array(gray)) > 127:
+        sketch = ImageOps.invert(sketch)
+        
     t = torch.tensor(np.array(sketch) / 255.0).permute(2, 0, 1).float()
     t = (t - 0.5) / 0.5
     t = t.unsqueeze(0).to(DEVICE)
@@ -63,7 +73,6 @@ def build_demo():
             "architecture trained on the CUHK Face Sketch (CUFS) dataset."
         ),
         examples=[],  # add example sketches from data/cufs/sketch/ here
-        allow_flagging="never",
     )
 
 

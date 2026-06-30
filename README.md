@@ -50,11 +50,19 @@ plausible-looking face.
 
 ## Setup
 
+Since PyTorch has compatibility issues with newer Python versions (such as Python 3.13) and NumPy 2.x, it is highly recommended to use **Python 3.10** and **numpy < 2**.
+
 ```bash
+# Create a dedicated Conda environment
+conda create -n sketch-env python=3.10 -y
+conda activate sketch-env
+
+# Install requirements
+pip install "numpy<2"
 pip install -r requirements.txt
 ```
 
-> Training requires a CUDA GPU. The pipeline falls back to CPU automatically
+> Training requires a CUDA GPU. The pipeline falls back to CPU/MPS automatically
 > (via `torch.cuda.is_available()`) but real training is impractical on CPU.
 
 ---
@@ -148,7 +156,10 @@ accuracy** to `outputs/eval/results.json`.
 python src/demo.py --ckpt outputs/checkpoints/final.pt --share
 ```
 
-Upload a sketch and get a generated photo.
+Upload a sketch and get a generated photo. 
+
+> [!NOTE]
+> The model is trained on negative sketches (white lines on black background). The demo automatically detects standard sketches (black lines on a white background) and inverts them prior to running inference to ensure correct translation.
 
 ---
 

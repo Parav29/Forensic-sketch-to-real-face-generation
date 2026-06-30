@@ -26,7 +26,7 @@ def evaluate(model_path: str, pairs_dir: str, output_dir: str, device="cuda"):
     from data.dataset import SketchPhotoDataset
     from torch.utils.data import DataLoader
 
-    device = torch.device(device if torch.cuda.is_available() else "cpu")
+    device = torch.device(device if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     G = UNetGenerator().to(device)
     ckpt = torch.load(model_path, map_location=device)
     G.load_state_dict(ckpt["G"])
