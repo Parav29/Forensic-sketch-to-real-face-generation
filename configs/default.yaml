@@ -1,3 +1,15 @@
+# ==========================================================================
+# Forensic Sketch -> Photo GAN — default configuration.
+# All keys are validated by src/utils/config.py (see DEFAULTS for the schema).
+# Legacy configs with a single `train.lr` still load (migrated to lr_g/lr_d).
+# ==========================================================================
+
+seed: 42
+deterministic: false      # true -> bit-reproducible (slower cuDNN)
+device: cuda              # falls back to cpu automatically if no GPU
+amp: true                # mixed precision (auto-disabled on CPU)
+wandb: false             # set true to enable Weights & Biases logging
+
 data:
   pairs_dir: data/cufs_pairs
   image_size: 256
@@ -5,27 +17,39 @@ data:
   num_workers: 4
 
 model:
-  ngf: 64        # generator filters
-  ndf: 64        # discriminator filters
+  ngf: 64                # generator base filters
+  ndf: 64                # discriminator base filters
+  use_attention: true    # self-attention at the 16x16 bottleneck
+  use_residual: true     # residual refinement blocks in the decoder
+  use_skip_fusion: true  # squeeze-excitation gating of skip connections
+  num_scales: 2          # multi-scale PatchGAN discriminator (1 = single scale)
+  spectral_norm: true    # spectral norm on discriminator convs
 
 loss:
   lambda_l1: 100
   lambda_perceptual: 10
   lambda_identity: 5
+  lambda_lpips: 1.0
+  lambda_fm: 10          # feature-matching loss weight
+  identity_backbone: facenet   # 'facenet' (default) or 'arcface' (InsightFace)
+  lpips_net: alex        # LPIPS backbone: alex | vgg | squeeze
 
 train:
   epochs: 200
-  lr: 0.0002
+  lr_g: 0.0002           # TTUR — generator learning rate
+  lr_d: 0.0008           # TTUR — discriminator learning rate
   beta1: 0.5
   beta2: 0.999
-  decay_start: 100   # epoch to start linear LR decay
+  decay_start: 100       # epoch to start linear LR decay
+  grad_clip: 0.0         # >0 enables gradient-norm clipping
+  ema_decay: 0.999       # generator EMA decay
   save_every: 10
   sample_every: 5
+  keep_last: 3           # rolling checkpoint retention
+  eval_fid_every: 0      # >0 -> compute validation FID every N epochs (best.pt)
 
 paths:
   checkpoints: outputs/checkpoints
   samples: outputs/samples
   metrics: outputs/metrics
-
-device: cuda
-wandb: false      # set true to enable W&B logging
+  logs: outputs/logs
