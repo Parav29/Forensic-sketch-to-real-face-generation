@@ -11,28 +11,33 @@ data/*_pairs/
 # Keep directory structure
 !.gitkeep
 
-# Outputs
-outputs/checkpoints/*
-outputs/samples/*
-outputs/metrics/*
-outputs/eval/
+# Outputs (checkpoints / samples / metrics / logs / eval / demo)
+outputs/
 
 # Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
 venv/
 .venv/
 env/
+build/
+dist/
 
 # Weights / models
 *.pt
 *.pth
 *.ckpt
+*.dat
+*.onnx
 
 # W&B
 wandb/
 
-# OS
+# OS / editor
 .DS_Store
+.idea/
+.vscode/

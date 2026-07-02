@@ -1,0 +1,32 @@
+name: sketch2photo
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pytorch>=2.2
+  - torchvision>=0.17
+  - pytorch-cuda=12.1        # drop this line for a CPU-only environment
+  - numpy
+  - pillow
+  - scipy
+  - scikit-image
+  - matplotlib
+  - tqdm
+  - pyyaml
+  - pip:
+      - opencv-python
+      - albumentations>=2.0
+      - lpips
+      - facenet-pytorch
+      - pytorch-fid
+      - gradio>=4.0
+      - wandb
+      - pytest
+      # Optional:
+      # - dlib
+      # - insightface
+      # - onnxruntime

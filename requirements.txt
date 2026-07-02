@@ -1,16 +1,33 @@
+# --- Core deep learning ---
 torch>=2.2.0
 torchvision>=0.17.0
+
+# --- Numerics / imaging ---
 numpy
 Pillow
 opencv-python
 scipy
 scikit-image
-lpips
-facenet-pytorch
-pytorch-fid
-albumentations
+
+# --- Losses / metrics ---
+lpips                 # LPIPS perceptual loss + metric
+facenet-pytorch       # FaceNet identity backbone (default identity loss)
+pytorch-fid           # FID (direct API)
+
+# --- Data / augmentation ---
+albumentations>=2.0
+
+# --- Training / demo / utils ---
 matplotlib
 tqdm
 pyyaml
 gradio>=4.0
-wandb
+wandb                 # optional experiment tracking
+
+# --- Testing ---
+pytest
+
+# --- Optional (uncomment to enable) ---
+# dlib                # landmark face alignment (needs shape_predictor_68 .dat)
+# insightface         # ArcFace identity backend + RetinaFace landmarks
+# onnxruntime         # required by insightface
